@@ -1,0 +1,14 @@
+[remap]
+
+importer="image"
+type="Image"
+uid="uid://cyevjjetw6fcm"
+path="res://.godot/imported/mountain.png-5473c9c1fe856f54bc600160769be4d0.image"
+
+[deps]
+
+source_file="res://Assets/Tiles/mountain.png"
+dest_files=["res://.godot/imported/mountain.png-5473c9c1fe856f54bc600160769be4d0.image"]
+
+[params]
+

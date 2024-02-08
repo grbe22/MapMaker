@@ -33,7 +33,7 @@ public partial class Perlin {
 		// PerlinGenerator();
 	}
 
-	public float[,] PerlinGenerator () {
+	public float[,] PerlinGenerator (bool centralized) {
 		// I don't understand why I used +1 in python, but it doesn't run without it.
 		// the third is so that it holds Vector2s.
 		gradient = new float[gradientSize + 1, gradientSize + 1, 2];
@@ -59,9 +59,14 @@ public partial class Perlin {
 		float max = -10f;
 		// builds the empty noise array.
 		noise = new float[mapSize,mapSize];
+		int center = (int)(mapSize / 2);
 		for (int i = 0; i < mapSize; i ++) {
 			for (int j = 0; j < mapSize; j++) {
 				float output = NoiseMaker(xValues[i], yValues[j]);
+				if (centralized) {
+					float maxDist = (float)(Math.Abs(center - j) + Math.Abs(center - i));
+					output -= maxDist / mapSize;
+				}
 				noise[i, j] = output;
 				if (output > max) {
 					max = output;
@@ -71,7 +76,7 @@ public partial class Perlin {
 				}
 			}
 		}
-		
+		GD.Print(max,  " ", min);
 		// normalizes the data between 0 and 1
 		float difference = max - min;
 		for (int i = 0; i < mapSize; i++) {
