@@ -1,12 +1,35 @@
-[gd_scene load_steps=3 format=3 uid="uid://bg2aanhyg2toh"]
+[gd_scene load_steps=6 format=3 uid="uid://bg2aanhyg2toh"]
 
 [ext_resource type="Script" path="res://Scripts/MapGrid.cs" id="2_cuauq"]
+[ext_resource type="Texture2D" uid="uid://c216o43qgbj2s" path="res://Assets/Tiles/tileSets.png" id="2_ippgr"]
 [ext_resource type="Script" path="res://scenes/MainCam.cs" id="2_kwghp"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_avkfk"]
+texture = ExtResource("2_ippgr")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+0:1/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_8842v"]
+sources/0 = SubResource("TileSetAtlasSource_avkfk")
 
 [node name="WorldMap" type="Node2D"]
 
 [node name="MapGrid" type="Sprite2D" parent="."]
 script = ExtResource("2_cuauq")
+
+[node name="TileMap" type="TileMap" parent="MapGrid"]
+tile_set = SubResource("TileSet_8842v")
+rendering_quadrant_size = 32
+format = 2
+layer_0/tile_data = PackedInt32Array(0, 65536, 0)
 
 [node name="MainCam" type="Camera2D" parent="."]
 script = ExtResource("2_kwghp")
