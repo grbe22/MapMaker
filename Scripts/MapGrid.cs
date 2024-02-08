@@ -70,7 +70,7 @@ public partial class MapGrid : Sprite2D
 					else if (heatValue > .80) { imagery = badlandsTexture; } 
 
 					else { imagery = beachTexture; }
-				} else if (heightValue < .92) {
+				} else if (heightValue < .92 || moistureValue > .7) {
 					
 					// generates extreme temperatures in higher values. Badlands are moderately hot, tundra is moderately cold.
 					if (heatValue < .2) { imagery = tundraTexture; }
@@ -93,13 +93,9 @@ public partial class MapGrid : Sprite2D
 					// in VERY high temperatures, generates badlands, otherwise, generates mountains.
 					if (heatValue > .85) { imagery = badlandsTexture; } 
 					
-					else {
-
-						// in wet areas, generates forests. I want to "break up" mountains, turn them from
-						// round blobs into LONG blobs. This isn't how I should do it.
-						if (moistureValue > .7) { imagery = forestTexture; }
-						else { imagery = mountainTexture; }
-					}
+					// mountains are very round blobs. I want SCRATCHES, like long canals of mountain, but I don't
+					// know how to go about this right now.
+					else { imagery = mountainTexture; }
 				}
 				
 				// Draw the texture onto the image
