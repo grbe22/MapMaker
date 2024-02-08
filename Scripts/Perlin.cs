@@ -17,9 +17,9 @@ public partial class Perlin {
 	public Perlin(int mapSize, int perlinSize, int seed)
 	{
 		this.mapSize = mapSize;
-		this.gradientSize = perlinSize;
+		gradientSize = perlinSize;
 		Random perlinBuilder = new Random(seed);
-		PerlinGenerator(mapSize, perlinSize);
+		// PerlinGenerator();
 	}
 
 	// all we need to take as input is the map size, and the perlinsize.
@@ -27,19 +27,19 @@ public partial class Perlin {
 	// this constructor creates its own seed.
 	public Perlin(int mapSize, int perlinSize) {
 		this.mapSize = mapSize;
-		this.gradientSize = perlinSize;
+		gradientSize = perlinSize;
 		perlinBuilder = new Random();
 		// I'm pretty sure I can make this better... but I don't care enough to.
-		PerlinGenerator(mapSize, perlinSize);
+		// PerlinGenerator();
 	}
 
-	private void PerlinGenerator (int mapSize, int perlinSize) {
+	public float[,] PerlinGenerator () {
 		// I don't understand why I used +1 in python, but it doesn't run without it.
 		// the third is so that it holds Vector2s.
-		gradient = new float[perlinSize + 1, perlinSize + 1, 2];
+		gradient = new float[gradientSize + 1, gradientSize + 1, 2];
 		// builds the gradient randomly with help of the seed and size of the perlin.
-		for (int i = 0; i < perlinSize + 1; i++) {
-			for (int j = 0; j < perlinSize + 1; j++) {
+		for (int i = 0; i < gradientSize + 1; i++) {
+			for (int j = 0; j < gradientSize + 1; j++) {
 				gradient[i, j, 0] = (float)perlinBuilder.NextDouble();
 				gradient[i, j, 1] = (float)perlinBuilder.NextDouble();
 			}
@@ -50,7 +50,7 @@ public partial class Perlin {
 		yValues = new float[mapSize];
 		// iterates through both lists, assigning them to (perlinSize / mapSize) * i 
 		for (int i = 0; i < mapSize; i++) {
-			float equitablePos = ((float)perlinSize / (float)mapSize) * (float)i;
+			float equitablePos = ((float)gradientSize / (float)mapSize) * (float)i;
 			xValues[i] = equitablePos;
 			yValues[i] = equitablePos;
 		}
@@ -81,6 +81,7 @@ public partial class Perlin {
 				noise[i, j] = thisOne;
 			}
 		}
+		return noise;
 	}
 
 	// simple helper function that helps ease the transition between sections.
