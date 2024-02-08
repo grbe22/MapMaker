@@ -102,7 +102,7 @@ public partial class MapGrid : Sprite2D
 	}
 	
 	private void PasteTexture(Vector2I pos, int tileId, TileMap foundation) {
-		Vector2I atlasLoc = new Vector2I((int)(tileId / 8), tileId % 8);
+		Vector2I atlasLoc = new Vector2I(tileId % 8, (int)(tileId / 8));
 		foundation.SetCell(0, pos, 0, atlasLoc, 0);
 	}
 
