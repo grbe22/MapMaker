@@ -76,7 +76,7 @@ public partial class Perlin {
 				}
 			}
 		}
-		GD.Print(max,  " ", min);
+		
 		// normalizes the data between 0 and 1
 		float difference = max - min;
 		for (int i = 0; i < mapSize; i++) {
@@ -89,6 +89,11 @@ public partial class Perlin {
 		return noise;
 	}
 
+	// when you want to change the number of perlinys 
+	public void UpdatePerlinMap(int size) {
+		gradientSize = size;
+	}
+	
 	// simple helper function that helps ease the transition between sections.
 	public float Smooth(float val)
 	{
