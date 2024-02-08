@@ -53,63 +53,12 @@ public partial class MapGrid : Sprite2D
 				int tileId;
 				
 				// Grab the info for the tile from the three arrays
-				float heightValue = heightMap[y, x];
-				float heatValue = heatMap[y, x];
-				float moistureValue = moistureMap[y, x];
+				float height = heightMap[y, x];
+				float heat = heatMap[y, x];
+				float moisture = moistureMap[y, x];
+				TileSetter.Tiles meterMaid = TileSetter.tileFromArrays(height, heat, moisture);
+				tileId = (int)meterMaid;
 				// Choose texture based on each array
-				/*
-					0 - grassland
-					1 - water
-					2 - ice
-					3 - badlands
-					4 - tundra
-					5 - beach
-					6 - swamp
-					7 - forest
-					8 - mountain
-				*/
-				if (heightValue < .5) {
-
-					// generates ocean, or icebergs in very cold climates.
-					if (heatValue < .12) { tileId = 2; }
-
-					else { tileId = 1; }
-				} else if (heightValue < .55) {
-
-					// A small window that generates coastline. In exceedingly cold areas, generates tundra, and generates
-					// badlands in very high temperatures.
-					if (heatValue < .17) { tileId = 4; } 
-
-					else if (heatValue > .83) { tileId = 3; } 
-
-					else { tileId = 5; }
-				} else if (heightValue < .92 || moistureValue > .7) {
-					
-					// generates extreme temperatures in higher values. Badlands are moderately hot, tundra is moderately cold.
-					if (heatValue < .2) { tileId = 4; }
-					
-					else if (heatValue > .8) { tileId = 3; } 
-
-					else {
-
-						// this is the default case which covers ~.6 of the tileSpan - it's distributed Gaussian-ly, so it's
-						// much more than just 60% of the tiles between .55 and .92.
-						// generates swamp in low temperatures, and forest in high temperatures.
-						if (moistureValue < .35) { tileId = 6; } 
-
-						else if (moistureValue < .65) { tileId = 0; } 
-						
-						else { tileId = 7; }
-					}
-				} else {
-					
-					// in VERY high temperatures, generates badlands, otherwise, generates mountains.
-					if (heatValue > .85) { tileId = 3; } 
-					
-					// mountains are very round blobs. I want SCRATCHES, like long canals of mountain, but I don't
-					// know how to go about this right now.
-					else { tileId = 8; }
-				}
 				// Draw the texture onto the image
 				PasteTexture(new Vector2I(2 * x - edgeSize, 2 * y - edgeSize), tileId, foundation);
 			}
