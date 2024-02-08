@@ -5,7 +5,7 @@ using System.Threading;
 
 public partial class MapGrid : Sprite2D
 {
-	int edgeSize = 250;
+	int edgeSize = 100;
 	int perlinScale = 7;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -52,6 +52,17 @@ public partial class MapGrid : Sprite2D
 				float heatValue = heatMap[y, x];
 				float moistureValue = moistureMap[y, x];
 				// Choose texture based on each array
+				/*
+					0 - grassland
+					1 - water
+					2 - ice
+					3 - badlands
+					4 - tundra
+					5 - beach
+					6 - swamp
+					7 - forest
+					8 - mountain
+				*/
 				if (heightValue < .5) {
 
 					// generates ocean, or icebergs in very cold climates.

@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://bg2aanhyg2toh"]
 
 [ext_resource type="Script" path="res://Scripts/MapGrid.cs" id="2_cuauq"]
-[ext_resource type="Texture2D" uid="uid://c216o43qgbj2s" path="res://Assets/Tiles/tileSets.png" id="2_ippgr"]
+[ext_resource type="Texture2D" uid="uid://csnitx5arxf8x" path="res://Assets/Tiles/tileSets.png" id="2_ippgr"]
 [ext_resource type="Script" path="res://scenes/MainCam.cs" id="2_kwghp"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_avkfk"]
@@ -29,7 +29,6 @@ script = ExtResource("2_cuauq")
 tile_set = SubResource("TileSet_8842v")
 rendering_quadrant_size = 32
 format = 2
-layer_0/tile_data = PackedInt32Array(0, 65536, 0)
 
 [node name="MainCam" type="Camera2D" parent="."]
 script = ExtResource("2_kwghp")

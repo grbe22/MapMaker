@@ -18,7 +18,7 @@ public partial class Perlin {
 	{
 		this.mapSize = mapSize;
 		gradientSize = perlinSize;
-		Random perlinBuilder = new Random(seed);
+		perlinBuilder = new Random(seed);
 		// PerlinGenerator();
 	}
 
