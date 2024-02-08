@@ -64,7 +64,9 @@ public partial class Perlin {
 			for (int j = 0; j < mapSize; j++) {
 				float output = NoiseMaker(xValues[i], yValues[j]);
 				if (centralized) {
-					float maxDist = (float)(Math.Abs(center - j) + Math.Abs(center - i));
+					float left = (center - j) * (center - j);
+					float right = (center - i) * (center - i);
+					float maxDist = (float)(Math.Sqrt(left + right)) * 1.3f;
 					output -= maxDist / mapSize;
 				}
 				noise[i, j] = output;

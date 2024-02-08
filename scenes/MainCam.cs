@@ -23,7 +23,7 @@ public partial class MainCam : Camera2D
 		}
 		if (Input.IsActionJustPressed("phZoom1")) {
 			Vector2 zoom = Zoom;
-			if (zoom.X > .2) {
+			if (zoom.X > .00) {
 				zoom.X *= .7f;
 				zoom.Y *= .7f;
 				Zoom = zoom;

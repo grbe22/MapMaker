@@ -5,11 +5,16 @@ using System.Threading;
 
 public partial class MapGrid : Sprite2D
 {
-	int edgeSize = 100;
-	int perlinScale = 7;
+	int edgeSize = 500;
+	// a larger ratio results in smaller, smoother blobs
+	int perlinScale;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		perlinScale = (int)(edgeSize / 50);
+		if (perlinScale < 2) {
+			perlinScale = 2;
+		}
 		Perlin mapMaker = new Perlin(edgeSize, perlinScale);
 		var timer = new Stopwatch();
 		timer.Start();
@@ -19,7 +24,7 @@ public partial class MapGrid : Sprite2D
 		GD.Print("HeightMap Complete at time ", timer.Elapsed);
 		// heatMap is for generating the temperature of the terrain - low temperature forms ice, high forms badlands.
 		float[,] heatMap;
-		mapMaker.UpdatePerlinMap(perlinScale / 2);
+		mapMaker.UpdatePerlinMap(perlinScale);
 		heatMap = mapMaker.PerlinGenerator(false);
 		GD.Print("HeatMap Complete at ", timer.Elapsed);
 		// moistureMap isn't really for moisture, but I dont know what a better name would be.
@@ -66,16 +71,16 @@ public partial class MapGrid : Sprite2D
 				if (heightValue < .5) {
 
 					// generates ocean, or icebergs in very cold climates.
-					if (heatValue < .16) { tileId = 2; }
+					if (heatValue < .12) { tileId = 2; }
 
 					else { tileId = 1; }
 				} else if (heightValue < .55) {
 
 					// A small window that generates coastline. In exceedingly cold areas, generates tundra, and generates
 					// badlands in very high temperatures.
-					if (heatValue < .20) { tileId = 4; } 
+					if (heatValue < .17) { tileId = 4; } 
 
-					else if (heatValue > .80) { tileId = 3; } 
+					else if (heatValue > .83) { tileId = 3; } 
 
 					else { tileId = 5; }
 				} else if (heightValue < .92 || moistureValue > .7) {
