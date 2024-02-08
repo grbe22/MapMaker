@@ -5,8 +5,8 @@ public partial class MapGrid : Sprite2D
 {
 	private const int CELL_SIZE = 32;
 	float[,] map;
-	int edgeSize = 20;
-	int perlinScale = 4;
+	int edgeSize = 150;
+	int perlinScale = 5;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -22,6 +22,7 @@ public partial class MapGrid : Sprite2D
 		// textures for later
 		Image oceanTexture = GD.Load<Image>("res://Assets/Tiles/ocean.png");
 		Image groundTexture = GD.Load<Image>("res://Assets/Tiles/ground.png");
+		Image beachTexture = GD.Load<Image> ("res://Assets/Tiles/beach.png");
 
 		// Loop through the grid data and draw cells
 		for (int y = 0; y < edgeSize; y++) {
@@ -31,7 +32,9 @@ public partial class MapGrid : Sprite2D
 				
 				// Choose texture based on grayscale value
 				Image texture = value < 0.5f ? oceanTexture : groundTexture;
-				
+				if (value > .5f && value < .55f) {
+					texture = beachTexture;
+				}
 				// Draw the texture onto the image
 				DrawTextureOnImage(image, new Vector2(x * CELL_SIZE, y * CELL_SIZE), texture);
 			}
