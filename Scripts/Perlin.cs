@@ -67,6 +67,10 @@ public partial class Perlin {
 					float left = (center - j) * (center - j);
 					float right = (center - i) * (center - i);
 					float maxDist = (float)(Math.Sqrt(left + right)) * 1.5f;
+					// .75f influences how spread out the land is
+					// higher means more centralized, lower means less.
+					// negative would make the edge land and center water.
+					// if that means anything.
 					output -= .75f * maxDist / mapSize;
 					// output -= maxDist / mapSize;
 				}
