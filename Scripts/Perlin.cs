@@ -2,7 +2,7 @@ using Godot;
 using System;
 
 public partial class Perlin {
-	int mapSize;
+	public static int mapSize;
 	int gradientSize;
 	
 	Random perlinBuilder;
@@ -14,9 +14,9 @@ public partial class Perlin {
 	float[,] noise;
 
 	// this is for seeding the run - you pass the seed as an integer value.
-	public Perlin(int mapSize, int perlinSize, int seed)
+	public Perlin(int _mapSize, int perlinSize, int seed)
 	{
-		this.mapSize = mapSize;
+		mapSize = _mapSize;
 		gradientSize = perlinSize;
 		perlinBuilder = new Random(seed);
 		// PerlinGenerator();
@@ -25,8 +25,8 @@ public partial class Perlin {
 	// all we need to take as input is the map size, and the perlinsize.
 	// larger perlinsize means more, smaller islands.
 	// this constructor creates its own seed.
-	public Perlin(int mapSize, int perlinSize) {
-		this.mapSize = mapSize;
+	public Perlin(int _mapSize, int perlinSize) {
+		mapSize = _mapSize;
 		gradientSize = perlinSize;
 		perlinBuilder = new Random();
 		// I'm pretty sure I can make this better... but I don't care enough to.

@@ -44,9 +44,6 @@ public partial class MainCam : Camera2D
 		if (RMBDown) {
 			Vector2 newMousePos = GetViewport().GetMousePosition();
 			Vector2 newClicker = new Vector2(newMousePos.X - mousePos.X, newMousePos.Y - mousePos.Y);
-			// now we multiply by zoom to get a more reponsive feeling zoom.
-			newClicker.X = newClicker.X;
-			newClicker.Y = newClicker.Y;
 			// this should now represent the change in x and y.
 			allFather.Position = new Vector2(allFather.Position.X + newClicker.X, allFather.Position.Y + newClicker.Y);
 			mousePos = newMousePos;
