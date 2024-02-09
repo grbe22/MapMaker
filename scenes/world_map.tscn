@@ -1,5 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://bg2aanhyg2toh"]
+[gd_scene load_steps=7 format=3 uid="uid://bg2aanhyg2toh"]
 
+[ext_resource type="Script" path="res://scenes/WorldMap.cs" id="1_8cnco"]
 [ext_resource type="Script" path="res://Scripts/MapGrid.cs" id="2_cuauq"]
 [ext_resource type="Texture2D" uid="uid://csnitx5arxf8x" path="res://Assets/Tiles/tileSets.png" id="2_ippgr"]
 [ext_resource type="Script" path="res://scenes/MainCam.cs" id="2_kwghp"]
@@ -23,6 +24,7 @@ texture_region_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_avkfk")
 
 [node name="WorldMap" type="Node2D"]
+script = ExtResource("1_8cnco")
 
 [node name="MapGrid" type="Sprite2D" parent="."]
 script = ExtResource("2_cuauq")
@@ -34,3 +36,11 @@ format = 2
 
 [node name="MainCam" type="Camera2D" parent="."]
 script = ExtResource("2_kwghp")
+
+[node name="MouseBlock" type="Label" parent="."]
+offset_left = 849.0
+offset_top = 475.0
+offset_right = 940.0
+offset_bottom = 523.0
+text = "Help me!"
+horizontal_alignment = 2

@@ -25,7 +25,7 @@ public partial class TileSetter : Node
 			// generates ocean, or icebergs in very cold climates.
 			if (heatValue < .12) { return Tiles.Ice; }
 			else { return Tiles.Water; }
-		} else if (heightValue < .55) {
+		} else if (heightValue < .53) {
 			// A small window that generates coastline. In exceedingly cold areas, generates tundra, and generates
 			// badlands in very high temperatures.
 			if (heatValue < .17) { return Tiles.Tundra; } 
