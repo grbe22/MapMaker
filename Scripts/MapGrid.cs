@@ -5,7 +5,7 @@ using System.Threading;
 
 public partial class MapGrid : Sprite2D
 {
-	int edgeSize = 2;
+	int edgeSize = 400;
 	// a larger ratio results in smaller, smoother blobs
 	int perlinScale;
 	TileSetter.Tiles[,] map;

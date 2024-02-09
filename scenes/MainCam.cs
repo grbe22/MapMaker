@@ -18,26 +18,23 @@ public partial class MainCam : Camera2D
 		if (Input.IsActionJustPressed("RMB")) {
 			mousePos = GetViewport().GetMousePosition();
 			RMBDown = true;
+			GD.Print(allFather.Position.X, allFather.Position.Y);
 		}
 		if (Input.IsActionJustReleased("RMB")) {
 			mousePos = GetViewport().GetMousePosition();
 			RMBDown = false;
 		}
 		if (Input.IsActionJustPressed("phZoom1")) {
-			Vector2 zoom = allFather.Scale;
-			if (zoom.X > .06) {
-				zoom.X *= .7f;
-				zoom.Y *= .7f;
-				allFather.Scale = zoom;
+			if (allFather.Scale.X > .06) {
+				allFather.Scale *= .7f;
+				allFather.Position *= .7f;
 				GD.Print(allFather.Scale);
 			}
 		}
 		if (Input.IsActionJustPressed("phZoom2")) {
-			Vector2 zoom = allFather.Scale;
-			if (zoom.X < 2) {
-				zoom.X *= (1 / .7f);
-				zoom.Y *= (1 / .7f);
-				allFather.Scale = zoom;
+			if (allFather.Scale.X < 2) {
+				allFather.Scale *= (1/.7f);
+				allFather.Position *= (1/.7f);
 				GD.Print(allFather.Scale);
 			}
 		}
