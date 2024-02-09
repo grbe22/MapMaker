@@ -5,7 +5,7 @@ public partial class Perlin {
 	public static int mapSize;
 	int gradientSize;
 	
-	Random perlinBuilder;
+	static Random perlinBuilder;
 
 	float[,,] gradient;
 	float[] xValues;
@@ -140,4 +140,19 @@ public partial class Perlin {
 
 		return (topNoise + ySmooth * (bottomNoise - topNoise));
 	}
+	
+	public static Vector2I ServeRandomGrass(TileSetter.Tiles[,] tiles) {
+		while (true) {
+			// center position
+			int displacement = mapSize / 2;
+			int xPos = perlinBuilder.Next(displacement / 2, 3 * displacement / 2);
+			int yPos = perlinBuilder.Next(displacement / 2, 3 * displacement / 2);
+			// i dont know where I went wrong in ths. But I have to put xPos, Ypos for
+			// the conditional and yPos, xPos for the output.
+			if (tiles[xPos, yPos] == TileSetter.Tiles.Grassland) {
+				return new Vector2I(yPos, xPos);
+			}
+		}
+	}
+	
 }

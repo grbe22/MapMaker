@@ -1,11 +1,10 @@
 using Godot;
 using System;
-using System.Diagnostics;
-using System.Threading;
+
 
 public partial class MapGrid : Sprite2D
 {
-	int edgeSize = 400;
+	int edgeSize = 200;
 	// a larger ratio results in smaller, smoother blobs
 	int perlinScale;
 	TileSetter.Tiles[,] map;
@@ -18,8 +17,6 @@ public partial class MapGrid : Sprite2D
 			perlinScale = 2;
 		}
 		Perlin mapMaker = new Perlin(edgeSize, perlinScale);
-		var timer = new Stopwatch();
-		timer.Start();
 		// heightMap is for generating sea level and terrain level.
 		float[,] heightMap;
 		heightMap = mapMaker.PerlinGenerator(true);
@@ -42,6 +39,7 @@ public partial class MapGrid : Sprite2D
 		// Loop through the grid data and paste cells
 		// loads the TileMap
 		TileMap foundation = (TileMap)GetChild(0);
+		Vector2I curseTile = new Vector2I(-1, -1);
 		for (int y = 0; y < edgeSize; y++) {
 			for (int x = 0; x < edgeSize; x++) {
 				// creates the 
@@ -55,15 +53,30 @@ public partial class MapGrid : Sprite2D
 				tileId = (int)meterMaid;
 				map[y, x] = meterMaid;
 				// Choose texture based on each array
-				// Draw the texture onto the image
-				PasteTexture(new Vector2I(2 * x - edgeSize, 2 * y - edgeSize), tileId, foundation);
+			}
+		}
+		curseTile = Perlin.ServeRandomGrass(map);
+		GD.Print(map[curseTile.Y, curseTile.X]);
+		map[curseTile.Y, curseTile.X] = TileSetter.Tiles.CurseBody;
+		int curseMax = edgeSize / 5;
+		GrowCurse(map, curseTile, curseMax);
+		// Draw the texture onto the image
+		PasteTexture(map, foundation);
+	}
+	
+	private void PasteTexture(TileSetter.Tiles[,] map, TileMap foundation) {
+		for (int y = 0; y < edgeSize; y++) {
+			for (int x = 0; x < edgeSize; x++) {
+				int tileId = (int)map[y,x];
+				int half = edgeSize / 2;
+				Vector2I atlasLoc = new Vector2I(tileId % 8, (int)(tileId / 8));
+				foundation.SetCell(0, new Vector2I(y - half, x - half), 0, atlasLoc, 0);
 			}
 		}
 	}
-	
-	private void PasteTexture(Vector2I pos, int tileId, TileMap foundation) {
-		Vector2I atlasLoc = new Vector2I(tileId % 8, (int)(tileId / 8));
-		foundation.SetCell(0, pos, 0, atlasLoc, 0);
+
+	private void GrowCurse(TileSetter.Tiles[,] map, Vector2I curseTile, int curseMax) {
+		return;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
