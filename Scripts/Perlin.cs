@@ -67,7 +67,8 @@ public partial class Perlin {
 					float left = (center - j) * (center - j);
 					float right = (center - i) * (center - i);
 					float maxDist = (float)(Math.Sqrt(left + right)) * 1.5f;
-					output -= maxDist / mapSize;
+					output -= .75f * maxDist / mapSize;
+					// output -= maxDist / mapSize;
 				}
 				noise[i, j] = output;
 				if (output > max) {
