@@ -1,9 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://bg2aanhyg2toh"]
 
-[ext_resource type="Script" path="res://scenes/WorldMap.cs" id="1_8cnco"]
+[ext_resource type="Script" path="res://Scripts/WorldMap.cs" id="1_8cnco"]
 [ext_resource type="Script" path="res://Scripts/MapGrid.cs" id="2_cuauq"]
 [ext_resource type="Texture2D" uid="uid://csnitx5arxf8x" path="res://Assets/Tiles/tileSets.png" id="2_ippgr"]
-[ext_resource type="Script" path="res://scenes/MainCam.cs" id="2_kwghp"]
+[ext_resource type="Script" path="res://MainCam.cs" id="2_kwghp"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_avkfk"]
 texture = ExtResource("2_ippgr")

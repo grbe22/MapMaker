@@ -170,14 +170,12 @@ public partial class Perlin {
 			double randGen = perlinBuilder.NextDouble();
 			if (probability > randGen) {
 				validTiles[orth.Y, orth.X] = 1;
-				GD.Print(orth.Y, " ", orth.X);
 				isValid[pointer] = 1;
 			} else {
 				validTiles[orth.Y, orth.X] = -1;
 				isValid[pointer] = 0;
 			}
 		}
-		GD.Print("");
 		pointer = 0;
 		foreach (Vector2I orth in orthags) {
 			if (isValid[pointer] == 1) {

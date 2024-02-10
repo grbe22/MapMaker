@@ -71,7 +71,6 @@ public partial class TileArray : Node
 			for (int j = 0; j < y; j++) {
 				thisLine = thisLine + (int)printer[i, j] + " ";
 			}
-			GD.Print(thisLine);
 		}
 	}
 

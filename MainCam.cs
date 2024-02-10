@@ -28,14 +28,12 @@ public partial class MainCam : Camera2D
 			if (allFather.Scale.X > .06) {
 				allFather.Scale *= .7f;
 				allFather.Position *= .7f;
-				GD.Print(allFather.Scale);
 			}
 		}
 		if (Input.IsActionJustPressed("phZoom2")) {
 			if (allFather.Scale.X < 2) {
 				allFather.Scale *= (1/.7f);
 				allFather.Position *= (1/.7f);
-				GD.Print(allFather.Scale);
 			}
 		}
 		if (RMBDown) {

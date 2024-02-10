@@ -27,7 +27,7 @@ public partial class WorldMap : Node2D
 		mousePos /= allFather.Scale;
 		mousePos /= 16;
 		mousePos += new Vector2(mapSize / 2, mapSize / 2);
-		if (mousePos.X < 0 || mousePos.Y < 0 || mousePos.X > mapSize || mousePos.Y > mapSize) {
+		if (mousePos.X < 0 || mousePos.Y < 0 || mousePos.X > mapSize + 1 || mousePos.Y > mapSize + 1) {
 			mouseBlock.Text = "";
 		} else {
 			mouseBlock.Text = (Math.Floor(mousePos.X) + " " + Math.Floor(mousePos.Y));

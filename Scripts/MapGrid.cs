@@ -4,15 +4,20 @@ using System.Linq;
 
 public partial class MapGrid : Sprite2D
 {
-	int edgeSize = 70;
-	// a larger ratio results in smaller, smoother blobs
+	// size of each vertex of the map
+	private const int edgeSize = 128;
+	// ratio between the map and the perlinMap
+	// a larger ration results in smaller, smoother blobs.
+	private const int ratio = 50;
+	private const int heatFactor = 4;
+	private const int moistureFactor = 4;
 	int perlinScale;
 	TileSetter.Tiles[,] map;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		map = new TileSetter.Tiles[edgeSize, edgeSize];
-		perlinScale = (int)(edgeSize / 50);
+		perlinScale = (int)(edgeSize / ratio);
 		if (perlinScale < 2) {
 			perlinScale = 2;
 		}
@@ -22,12 +27,12 @@ public partial class MapGrid : Sprite2D
 		heightMap = mapMaker.PerlinGenerator(true);
 		// heatMap is for generating the temperature of the terrain - low temperature forms ice, high forms badlands.
 		float[,] heatMap;
-		mapMaker.UpdatePerlinMap(perlinScale);
+		mapMaker.UpdatePerlinMap(perlinScale * heatFactor);
 		heatMap = mapMaker.PerlinGenerator(false);
 		// moistureMap isn't really for moisture, but I dont know what a better name would be.
 		// High values generate forest & overgrown areas, low generate swamps and "murky" areas.
 		float[,] moistureMap;
-		mapMaker.UpdatePerlinMap(perlinScale * 4);
+		mapMaker.UpdatePerlinMap(perlinScale * moistureFactor);
 		moistureMap = mapMaker.PerlinGenerator(false);
 		
 		// generates the map using these three maps.
