@@ -5,6 +5,8 @@ using System.Linq;
 public partial class MapGrid : Sprite2D
 {
 	// size of each vertex of the map
+	// most map generators for colonization games cap out around 100-200 x 100-200
+	// it runs HELLA slow > 600, but that's not a realistic problem.
 	private const int edgeSize = 128;
 	// ratio between the map and the perlinMap
 	// a larger ration results in smaller, smoother blobs.
