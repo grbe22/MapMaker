@@ -155,4 +155,67 @@ public partial class Perlin {
 		}
 	}
 	
+	// finnessTiles contains the tiles. -1 is invalid - wrong terrain or already checked.
+	// 0 is valid and unchecked.
+	// 1 is curse.
+	public static void FinnesseTiles(int maxDepth, int[,] validTiles, Vector2I startingPos, int depth, int size) {
+		if (maxDepth <= depth) {
+			return;
+		}
+		Vector2I[] orthags = GetValidOrthagonal(validTiles, startingPos, size);
+		int pointer = 0;
+		int[] isValid = new int[orthags.Length];
+		foreach (Vector2I orth in orthags) {
+			double probability = Math.Pow(.95, depth - 1);
+			double randGen = perlinBuilder.NextDouble();
+			if (probability > randGen) {
+				validTiles[orth.Y, orth.X] = 1;
+				GD.Print(orth.Y, " ", orth.X);
+				isValid[pointer] = 1;
+			} else {
+				validTiles[orth.Y, orth.X] = -1;
+				isValid[pointer] = 0;
+			}
+		}
+		GD.Print("");
+		pointer = 0;
+		foreach (Vector2I orth in orthags) {
+			if (isValid[pointer] == 1) {
+				FinnesseTiles(maxDepth, validTiles, orth, depth + 1, size);
+			}
+		}
+		string nape = "";
+		int loop = 0;
+	}
+	
+	public static Vector2I[] GetValidOrthagonal(int[,] ValidTiles, Vector2I origin, int size) {
+		Vector2I[] orthags = new Vector2I[4];
+		int numValid = 0;
+		Vector2I curr = new Vector2I(origin.X - 1, origin.Y);
+		if (ValidTiles[curr.Y, curr.X] == 0) {
+			orthags[numValid] = curr;
+			numValid += 1;
+		}
+		curr = new Vector2I(origin.X + 1, origin.Y);
+		if (ValidTiles[curr.Y, curr.X] == 0) {
+			orthags[numValid] = curr;
+			numValid += 1;
+		}
+		curr = new Vector2I(origin.X, origin.Y - 1);
+		if (ValidTiles[curr.Y, curr.X] == 0) {
+			orthags[numValid] = curr;
+			numValid += 1;
+		}
+		curr = new Vector2I(origin.X, origin.Y + 1);
+		if (ValidTiles[curr.Y, curr.X] == 0) {
+			orthags[numValid] = curr;
+			numValid += 1;
+		}
+		Vector2I[] trimmedOrthags = new Vector2I[numValid];
+		for (int i = 0; i < numValid; i++) {
+			trimmedOrthags[i] = orthags[i];
+		}
+		return trimmedOrthags;
+	}
+	
 }

@@ -31,7 +31,7 @@ public partial class TileSetter : Node
 			// A small window that generates coastline. In exceedingly cold areas, generates tundra, and generates
 			// badlands in very high temperatures.
 			if (heatValue < .17) { return Tiles.Tundra; } 
-			else if (heatValue > .83) { return Tiles.Badlands; } 
+			else if (heatValue > .87) { return Tiles.Badlands; } 
 			else { return Tiles.Beach; }
 		} else if (heightValue < .92 || moistureValue > .7) {
 			// generates extreme temperatures in higher values. Badlands are moderately hot, tundra is moderately cold.

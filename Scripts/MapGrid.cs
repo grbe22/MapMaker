@@ -1,10 +1,10 @@
 using Godot;
 using System;
-
+using System.Linq;
 
 public partial class MapGrid : Sprite2D
 {
-	int edgeSize = 200;
+	int edgeSize = 70;
 	// a larger ratio results in smaller, smoother blobs
 	int perlinScale;
 	TileSetter.Tiles[,] map;
@@ -55,11 +55,15 @@ public partial class MapGrid : Sprite2D
 				// Choose texture based on each array
 			}
 		}
-		curseTile = Perlin.ServeRandomGrass(map);
-		GD.Print(map[curseTile.Y, curseTile.X]);
-		map[curseTile.Y, curseTile.X] = TileSetter.Tiles.CurseBody;
-		int curseMax = edgeSize / 5;
-		GrowCurse(map, curseTile, curseMax);
+		// max side length of the curse spread
+		// should be an odd number > 1
+		int curseMax = 15;
+		for (int i = 0; i < 1; i++) {
+			// serves a random... grass. A grassland tile "near" the center of the map.
+			curseTile = Perlin.ServeRandomGrass(map);
+			map[curseTile.Y, curseTile.X] = TileSetter.Tiles.CurseBody;
+			GrowCurse(map, curseTile, curseMax);
+		}
 		// Draw the texture onto the image
 		PasteTexture(map, foundation);
 	}
@@ -76,7 +80,35 @@ public partial class MapGrid : Sprite2D
 	}
 
 	private void GrowCurse(TileSetter.Tiles[,] map, Vector2I curseTile, int curseMax) {
-		return;
+		// generates a 2d List
+		int[,] validTiles = new int[curseMax, curseMax];
+		int startX = curseTile.X - curseMax / 2;
+		int startY = curseTile.Y - curseMax / 2;
+		TileSetter.Tiles[] validTile = new[] {
+			TileSetter.Tiles.Grassland, 
+			TileSetter.Tiles.Swamp,
+			TileSetter.Tiles.Forest,
+			TileSetter.Tiles.Beach
+		};
+		for (int y = 0; y < curseMax; y++) {
+			for (int x = 0; x < curseMax; x ++) {
+				if (validTile.Contains(map[y + startY,x + startX])) {
+					validTiles[y, x] = 0;
+				} else {
+					validTiles[y, x] = -1;
+				}
+			}
+		}
+		validTiles[curseMax / 2, curseMax / 2] = 1;
+		Perlin.FinnesseTiles(curseMax / 2, validTiles, new Vector2I(curseMax/2, curseMax/2), 1, curseMax);
+		// no idea how I'm going to implement this.
+		for (int y = 0; y < curseMax; y++) {
+			for (int x = 0; x < curseMax; x++) {
+				if (validTiles[y,x] == 1) {
+					map[y + startY, x + startX] = TileSetter.Tiles.CurseBody;
+				}
+			}
+		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
