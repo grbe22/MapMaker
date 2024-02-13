@@ -7,11 +7,12 @@ public partial class MapGrid : Sprite2D
 	// size of each vertex of the map
 	// most map generators for colonization games cap out around 100-200 x 100-200
 	// it runs HELLA slow > 600, but that's not a realistic problem.
-	private const int edgeSize = 128;
+	private const int edgeSize = 64;
+	private const int curseBlooms = 2;
 	// ratio between the map and the perlinMap
 	// a larger ration results in smaller, smoother blobs.
 	private const int ratio = 50;
-	private const int heatFactor = 4;
+	private const int heatFactor = 2;
 	private const int moistureFactor = 4;
 	int perlinScale;
 	TileSetter.Tiles[,] map;
@@ -65,7 +66,7 @@ public partial class MapGrid : Sprite2D
 		// max side length of the curse spread
 		// should be an odd number > 1
 		int curseMax = 15;
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < curseBlooms; i++) {
 			// serves a random... grass. A grassland tile "near" the center of the map.
 			curseTile = Perlin.ServeRandomGrass(map);
 			map[curseTile.Y, curseTile.X] = TileSetter.Tiles.CurseBody;
@@ -108,11 +109,15 @@ public partial class MapGrid : Sprite2D
 		}
 		validTiles[curseMax / 2, curseMax / 2] = 1;
 		Perlin.FinnesseTiles(curseMax / 2, validTiles, new Vector2I(curseMax/2, curseMax/2), 1, curseMax);
-		// no idea how I'm going to implement this.
+		// here's how we implement this:
+		// we use the function, FinnesseTiles, to generate an nxn "body" for the curse.
 		for (int y = 0; y < curseMax; y++) {
 			for (int x = 0; x < curseMax; x++) {
 				if (validTiles[y,x] == 1) {
 					map[y + startY, x + startX] = TileSetter.Tiles.CurseBody;
+				}
+				if (validTiles[y,x] == 2) {
+					map[y + startY, x + startX] = TileSetter.Tiles.CurseHead;
 				}
 			}
 		}

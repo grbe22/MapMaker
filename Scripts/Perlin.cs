@@ -14,8 +14,7 @@ public partial class Perlin {
 	float[,] noise;
 
 	// this is for seeding the run - you pass the seed as an integer value.
-	public Perlin(int _mapSize, int perlinSize, int seed)
-	{
+	public Perlin(int _mapSize, int perlinSize, int seed) {
 		mapSize = _mapSize;
 		gradientSize = perlinSize;
 		perlinBuilder = new Random(seed);
@@ -101,14 +100,12 @@ public partial class Perlin {
 	}
 	
 	// simple helper function that helps ease the transition between sections.
-	public float Smooth(float val)
-	{
+	public float Smooth(float val){
 		return (val * val * (3 - (2 * val)));
 	}
 
 	// special function that calculates the dot product between an edge, and the distance.
-	public float DotProduct(Vector2 edge, Vector2 point)
-	{
+	public float DotProduct(Vector2 edge, Vector2 point){
 		float xDiff = edge.X - point.X;
 		float yDiff = edge.Y - point.Y;
 		// finds the x and y values of the targeted edge.
@@ -172,15 +169,21 @@ public partial class Perlin {
 				validTiles[orth.Y, orth.X] = 1;
 				isValid[pointer] = 1;
 			} else {
-				validTiles[orth.Y, orth.X] = -1;
+				if (perlinBuilder.NextDouble() > .2) {
+					validTiles[orth.Y, orth.X] = -1;
+				} else {
+					validTiles[orth.Y, orth.X] = 2;
+				}
 				isValid[pointer] = 0;
 			}
+			pointer += 1;
 		}
 		pointer = 0;
 		foreach (Vector2I orth in orthags) {
 			if (isValid[pointer] == 1) {
 				FinnesseTiles(maxDepth, validTiles, orth, depth + 1, size);
 			}
+			pointer += 1;
 		}
 		string nape = "";
 		int loop = 0;
