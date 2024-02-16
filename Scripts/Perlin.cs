@@ -169,7 +169,7 @@ public partial class Perlin {
 				validTiles[orth.Y, orth.X] = 1;
 				isValid[pointer] = 1;
 			} else {
-				if (perlinBuilder.NextDouble() > .2) {
+				if (perlinBuilder.NextDouble() > .3) {
 					validTiles[orth.Y, orth.X] = -1;
 				} else {
 					validTiles[orth.Y, orth.X] = 2;
