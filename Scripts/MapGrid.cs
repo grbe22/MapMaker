@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Linq;
+using System.Diagnostics;
 
 public partial class MapGrid : Sprite2D
 {
@@ -19,6 +20,8 @@ public partial class MapGrid : Sprite2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		Stopwatch timer = new Stopwatch();
+		timer.Start();
 		map = new TileSetter.Tiles[edgeSize, edgeSize];
 		perlinScale = (int)(edgeSize / ratio);
 		if (perlinScale < 2) {
@@ -41,6 +44,8 @@ public partial class MapGrid : Sprite2D
 		// generates the map using these three maps.
 		GenerateGrid(heightMap, heatMap, moistureMap);
 		Position = new Vector2(0, 0);
+		timer.Stop();
+		GD.Print(timer.Elapsed);
 	}
 
 	private void GenerateGrid(float[,] heightMap, float[,] heatMap, float[,] moistureMap) {

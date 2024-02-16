@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 public partial class Perlin {
 	public static int mapSize;
@@ -59,7 +60,10 @@ public partial class Perlin {
 		// builds the empty noise array.
 		noise = new float[mapSize,mapSize];
 		int center = (int)(mapSize / 2);
-		for (int i = 0; i < mapSize; i ++) {
+		Parallel.For(0, mapSize, i => {
+			// this is already run in parallel; no sense in running it again.
+			// I don't think any major benefit can be attained by
+			// using Parallel.For inside a Parallel.For. It's already using the max num of threads.
 			for (int j = 0; j < mapSize; j++) {
 				float output = NoiseMaker(xValues[i], yValues[j]);
 				if (centralized) {
@@ -81,16 +85,16 @@ public partial class Perlin {
 					min = output;
 				}
 			}
-		}
+		});
 		// normalizes the data between 0 and 1
 		float difference = max - min;
-		for (int i = 0; i < mapSize; i++) {
+		Parallel.For (0, mapSize, i => {
 			for (int j = 0; j < mapSize; j++) {
 				float thisOne = noise[i, j];
 				thisOne = (thisOne - min) / difference;
 				noise[i, j] = thisOne;
 			}
-		}
+		});
 		return noise;
 	}
 
