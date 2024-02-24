@@ -60,6 +60,7 @@ public partial class Perlin {
 		// builds the empty noise array.
 		noise = new float[mapSize,mapSize];
 		int center = (int)(mapSize / 2);
+		// fills the noise array
 		Parallel.For(0, mapSize, i => {
 			// this is already run in parallel; no sense in running it again.
 			// I don't think any major benefit can be attained by
