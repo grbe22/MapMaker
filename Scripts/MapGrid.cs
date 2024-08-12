@@ -8,7 +8,7 @@ public partial class MapGrid : Sprite2D
 	// size of each vertex of the map
 	// most map generators for colonization games cap out around 100-200 x 100-200
 	// it runs slow @ > 600, but that's not a realistic problem.
-	private const int edgeSize = 64;
+	private int edgeSize = 64;
 	// ratio between the map and the perlinMap
 	// a larger ration results in smaller, smoother blobs.
 	private const int ratio = 32;
@@ -35,6 +35,7 @@ public partial class MapGrid : Sprite2D
 	public void CreateHeatMaps() {
 		
 		float centralized = (float)GetNode<HSlider>("../MapKeys/Centralization/cSlider").Value;
+		edgeSize = (int)GetNode<HSlider>("../MapKeys/MapSize/mSlider").Value;
 		
 		map = new TileSetter.Tiles[edgeSize, edgeSize];
 		perlinScale = (int)(edgeSize / ratio);
