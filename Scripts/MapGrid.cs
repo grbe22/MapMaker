@@ -33,6 +33,9 @@ public partial class MapGrid : Sprite2D
 		
 	// creates a new set of maps, and updates the old one.
 	public void CreateHeatMaps() {
+		
+		float centralized = (float)GetNode<HSlider>("../MapKeys/Centralization/cSlider").Value;
+		
 		map = new TileSetter.Tiles[edgeSize, edgeSize];
 		perlinScale = (int)(edgeSize / ratio);
 		if (perlinScale < 2) {
@@ -41,7 +44,6 @@ public partial class MapGrid : Sprite2D
 		Perlin mapMaker = new Perlin(edgeSize, perlinScale);
 		// heightMap is for generating sea level and terrain level.
 		float[,] heightMap;
-		float centralized = 0.5f;
 		heightMap = mapMaker.PerlinGenerator(centralized);
 		// heatMap is for generating the temperature of the terrain - low temperature forms ice, high forms badlands.
 		float[,] heatMap;
