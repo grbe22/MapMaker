@@ -8,12 +8,10 @@ public partial class MapGrid : Sprite2D
 	// size of each vertex of the map
 	// most map generators for colonization games cap out around 100-200 x 100-200
 	// it runs slow @ > 600, but that's not a realistic problem.
-	private const int edgeSize = 256;
-	// number of curses it attempts to spawn
-	private const int curseBlooms = 2;
+	private const int edgeSize = 64;
 	// ratio between the map and the perlinMap
 	// a larger ration results in smaller, smoother blobs.
-	private const int ratio = 64;
+	private const int ratio = 32;
 	// results in smaller blobs of "heat"
 	private const int heatFactor = 2;
 	// results in much smaller patches of swamp / forest
@@ -23,8 +21,18 @@ public partial class MapGrid : Sprite2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		Stopwatch timer = new Stopwatch();
-		timer.Start();
+		CreateHeatMaps();
+	}
+	
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Process(double delta) {
+		if (Input.IsActionJustPressed("Reload")) {
+			CreateHeatMaps();
+		}
+	}
+		
+	// creates a new set of maps, and updates the old one.
+	public void CreateHeatMaps() {
 		map = new TileSetter.Tiles[edgeSize, edgeSize];
 		perlinScale = (int)(edgeSize / ratio);
 		if (perlinScale < 2) {
@@ -33,29 +41,27 @@ public partial class MapGrid : Sprite2D
 		Perlin mapMaker = new Perlin(edgeSize, perlinScale);
 		// heightMap is for generating sea level and terrain level.
 		float[,] heightMap;
-		heightMap = mapMaker.PerlinGenerator(true);
+		float centralized = 0.5f;
+		heightMap = mapMaker.PerlinGenerator(centralized);
 		// heatMap is for generating the temperature of the terrain - low temperature forms ice, high forms badlands.
 		float[,] heatMap;
 		mapMaker.UpdatePerlinMap(perlinScale * heatFactor);
-		heatMap = mapMaker.PerlinGenerator(false);
+		heatMap = mapMaker.PerlinGenerator(0.0f);
 		// moistureMap isn't really for moisture, but I dont know what a better name would be.
 		// High values generate forest & overgrown areas, low generate swamps and "murky" areas.
 		float[,] moistureMap;
 		mapMaker.UpdatePerlinMap(perlinScale * moistureFactor);
-		moistureMap = mapMaker.PerlinGenerator(false);
+		moistureMap = mapMaker.PerlinGenerator(0.0f);
 		
 		// generates the map using these three maps.
 		GenerateGrid(heightMap, heatMap, moistureMap);
 		Position = new Vector2(0, 0);
-		timer.Stop();
-		GD.Print(timer.Elapsed);
 	}
 
 	private void GenerateGrid(float[,] heightMap, float[,] heatMap, float[,] moistureMap) {
 		// Loop through the grid data and paste cells
 		// loads the TileMap
 		TileMap foundation = (TileMap)GetChild(0);
-		Vector2I curseTile = new Vector2I(-1, -1);
 		for (int y = 0; y < edgeSize; y++) {
 			for (int x = 0; x < edgeSize; x++) {
 				// creates the 
@@ -71,15 +77,6 @@ public partial class MapGrid : Sprite2D
 				// Choose texture based on each array
 			}
 		}
-		// max side length of the curse spread
-		// should be an odd number > 1
-		int curseMax = 15;
-		for (int i = 0; i < curseBlooms; i++) {
-			// serves a random... grass. A grassland tile "near" the center of the map.
-			curseTile = Perlin.ServeRandomGrass(map);
-			map[curseTile.Y, curseTile.X] = TileSetter.Tiles.CurseBody;
-			GrowCurse(map, curseTile, curseMax);
-		}
 		// Draw the texture onto the image
 		PasteTexture(map, foundation);
 	}
@@ -93,46 +90,5 @@ public partial class MapGrid : Sprite2D
 				foundation.SetCell(0, new Vector2I(y - half, x - half), 0, atlasLoc, 0);
 			}
 		}
-	}
-
-	private void GrowCurse(TileSetter.Tiles[,] map, Vector2I curseTile, int curseMax) {
-		// generates a 2d List
-		int[,] validTiles = new int[curseMax, curseMax];
-		int startX = curseTile.X - curseMax / 2;
-		int startY = curseTile.Y - curseMax / 2;
-		TileSetter.Tiles[] validTile = new[] {
-			TileSetter.Tiles.Grassland, 
-			TileSetter.Tiles.Swamp,
-			TileSetter.Tiles.Forest,
-			TileSetter.Tiles.Beach
-		};
-		for (int y = 0; y < curseMax; y++) {
-			for (int x = 0; x < curseMax; x ++) {
-				if (validTile.Contains(map[y + startY,x + startX])) {
-					validTiles[y, x] = 0;
-				} else {
-					validTiles[y, x] = -1;
-				}
-			}
-		}
-		validTiles[curseMax / 2, curseMax / 2] = 1;
-		Perlin.FinnesseTiles(curseMax / 2, validTiles, new Vector2I(curseMax/2, curseMax/2), 1, curseMax);
-		// here's how we implement this:
-		// we use the function, FinnesseTiles, to generate an nxn "body" for the curse.
-		for (int y = 0; y < curseMax; y++) {
-			for (int x = 0; x < curseMax; x++) {
-				if (validTiles[y,x] == 1) {
-					map[y + startY, x + startX] = TileSetter.Tiles.CurseBody;
-				}
-				if (validTiles[y,x] == 2) {
-					map[y + startY, x + startX] = TileSetter.Tiles.CurseHead;
-				}
-			}
-		}
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
 	}
 }

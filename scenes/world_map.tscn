@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://bg2aanhyg2toh"]
+[gd_scene load_steps=8 format=3 uid="uid://bg2aanhyg2toh"]
 
 [ext_resource type="Script" path="res://Scripts/WorldMap.cs" id="1_8cnco"]
 [ext_resource type="Script" path="res://Scripts/MapGrid.cs" id="2_cuauq"]
 [ext_resource type="Texture2D" uid="uid://csnitx5arxf8x" path="res://Assets/Tiles/tileSets.png" id="2_ippgr"]
-[ext_resource type="Script" path="res://MainCam.cs" id="2_kwghp"]
+[ext_resource type="Script" path="res://Scripts/MainCam.cs" id="2_kwghp"]
+[ext_resource type="Script" path="res://scenes/MapKeys.cs" id="5_6lv40"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_avkfk"]
 texture = ExtResource("2_ippgr")
@@ -44,3 +45,33 @@ offset_right = 940.0
 offset_bottom = 523.0
 text = "Help me!"
 horizontal_alignment = 2
+
+[node name="MapKeys" type="Node2D" parent="."]
+script = ExtResource("5_6lv40")
+
+[node name="Centralization" type="Node2D" parent="MapKeys"]
+
+[node name="cSlider" type="HSlider" parent="MapKeys/Centralization"]
+offset_left = -900.0
+offset_top = -370.0
+offset_right = -702.0
+offset_bottom = -354.0
+max_value = 1.0
+step = 0.05
+
+[node name="cText" type="Label" parent="MapKeys/Centralization"]
+offset_left = -920.0
+offset_top = -410.0
+offset_right = -740.0
+offset_bottom = -370.0
+theme_override_font_sizes/font_size = 25
+text = "Centralization
+"
+
+[node name="cValue" type="Label" parent="MapKeys/Centralization"]
+offset_left = -730.0
+offset_top = -410.0
+offset_right = -670.0
+offset_bottom = -370.0
+theme_override_font_sizes/font_size = 25
+text = "0.60"

@@ -1,3 +1,8 @@
+/*
+	Holds the function responsible for generating a perlin noise map.
+	Can be seeded. Requires a mapSize and a (SMALLER) perlinSize.
+*/
+
 using Godot;
 using System;
 using System.Threading.Tasks;
@@ -33,7 +38,7 @@ public partial class Perlin {
 		// PerlinGenerator();
 	}
 
-	public float[,] PerlinGenerator (bool centralized) {
+	public float[,] PerlinGenerator (float centralized) {
 		// I don't understand why I used +1 in python, but it doesn't run without it.
 		// the third is so that it holds Vector2s.
 		gradient = new float[gradientSize + 1, gradientSize + 1, 2];
@@ -67,15 +72,15 @@ public partial class Perlin {
 			// using Parallel.For inside a Parallel.For. It's already using the max num of threads.
 			for (int j = 0; j < mapSize; j++) {
 				float output = NoiseMaker(xValues[i], yValues[j]);
-				if (centralized) {
+				if (centralized != 0.0f) {
 					float left = (center - j) * (center - j);
 					float right = (center - i) * (center - i);
 					float maxDist = (float)(Math.Sqrt(left + right)) * 1.5f;
-					// .75f influences how spread out the land is
+					// centralized influences how spread out the land is
 					// higher means more centralized, lower means less.
 					// negative would make the edge land and center water.
 					// if that means anything.
-					output -= .75f * maxDist / mapSize;
+					output -= centralized * maxDist / mapSize;
 					// output -= maxDist / mapSize;
 				}
 				noise[i, j] = output;
@@ -142,86 +147,4 @@ public partial class Perlin {
 
 		return (topNoise + ySmooth * (bottomNoise - topNoise));
 	}
-	
-	public static Vector2I ServeRandomGrass(TileSetter.Tiles[,] tiles) {
-		while (true) {
-			// center position
-			int displacement = mapSize / 2;
-			int xPos = perlinBuilder.Next(displacement / 2, 3 * displacement / 2);
-			int yPos = perlinBuilder.Next(displacement / 2, 3 * displacement / 2);
-			// i dont know where I went wrong in ths. But I have to put xPos, Ypos for
-			// the conditional and yPos, xPos for the output.
-			if (tiles[xPos, yPos] == TileSetter.Tiles.Grassland) {
-				return new Vector2I(yPos, xPos);
-			}
-		}
-	}
-	
-	// finnessTiles contains the tiles. -1 is invalid - wrong terrain or already checked.
-	// 0 is valid and unchecked.
-	// 1 is curse.
-	public static void FinnesseTiles(int maxDepth, int[,] validTiles, Vector2I startingPos, int depth, int size) {
-		if (maxDepth <= depth) {
-			return;
-		}
-		Vector2I[] orthags = GetValidOrthagonal(validTiles, startingPos, size);
-		int pointer = 0;
-		int[] isValid = new int[orthags.Length];
-		foreach (Vector2I orth in orthags) {
-			double probability = Math.Pow(.95, depth - 1);
-			double randGen = perlinBuilder.NextDouble();
-			if (probability > randGen) {
-				validTiles[orth.Y, orth.X] = 1;
-				isValid[pointer] = 1;
-			} else {
-				if (perlinBuilder.NextDouble() > .3) {
-					validTiles[orth.Y, orth.X] = -1;
-				} else {
-					validTiles[orth.Y, orth.X] = 2;
-				}
-				isValid[pointer] = 0;
-			}
-			pointer += 1;
-		}
-		pointer = 0;
-		foreach (Vector2I orth in orthags) {
-			if (isValid[pointer] == 1) {
-				FinnesseTiles(maxDepth, validTiles, orth, depth + 1, size);
-			}
-			pointer += 1;
-		}
-		string nape = "";
-		int loop = 0;
-	}
-	
-	public static Vector2I[] GetValidOrthagonal(int[,] ValidTiles, Vector2I origin, int size) {
-		Vector2I[] orthags = new Vector2I[4];
-		int numValid = 0;
-		Vector2I curr = new Vector2I(origin.X - 1, origin.Y);
-		if (ValidTiles[curr.Y, curr.X] == 0) {
-			orthags[numValid] = curr;
-			numValid += 1;
-		}
-		curr = new Vector2I(origin.X + 1, origin.Y);
-		if (ValidTiles[curr.Y, curr.X] == 0) {
-			orthags[numValid] = curr;
-			numValid += 1;
-		}
-		curr = new Vector2I(origin.X, origin.Y - 1);
-		if (ValidTiles[curr.Y, curr.X] == 0) {
-			orthags[numValid] = curr;
-			numValid += 1;
-		}
-		curr = new Vector2I(origin.X, origin.Y + 1);
-		if (ValidTiles[curr.Y, curr.X] == 0) {
-			orthags[numValid] = curr;
-			numValid += 1;
-		}
-		Vector2I[] trimmedOrthags = new Vector2I[numValid];
-		for (int i = 0; i < numValid; i++) {
-			trimmedOrthags[i] = orthags[i];
-		}
-		return trimmedOrthags;
-	}
-	
 }

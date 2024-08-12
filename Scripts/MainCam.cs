@@ -1,3 +1,8 @@
+/*
+	Handles camera positioning. Holding RMB while moving mouse moves map;
+	Pressing z / x / scroll wheel zooms.
+*/
+
 using Godot;
 using System;
 

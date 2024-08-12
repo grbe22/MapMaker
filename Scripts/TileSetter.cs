@@ -1,3 +1,8 @@
+/*
+	Generates a map given existing critera. Does so using an enumerable Tiles,
+	Which stores all of the tiles that might exist.
+*/
+
 using Godot;
 using System;
 
@@ -15,8 +20,6 @@ public partial class TileSetter : Node
 		Swamp = 6,
 		Forest = 7,
 		Mountain = 8,
-		CurseBody = 9,
-		CurseHead = 10
 	}
 	
 	// takes three float inputs and outputs a single enum value
