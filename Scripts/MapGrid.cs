@@ -11,11 +11,11 @@ public partial class MapGrid : Sprite2D
 	private int edgeSize = 64;
 	// ratio between the map and the perlinMap
 	// a larger ration results in smaller, smoother blobs.
-	private const int ratio = 32;
+	private int ratio = 32;
 	// results in smaller blobs of "heat"
-	private const int heatFactor = 2;
+	private int heatFactor = 4;
 	// results in much smaller patches of swamp / forest
-	private const int moistureFactor = 4;
+	private int moistureFactor = 4;
 	int perlinScale;
 	TileSetter.Tiles[,] map;
 	// Called when the node enters the scene tree for the first time.
@@ -34,15 +34,26 @@ public partial class MapGrid : Sprite2D
 	// creates a new set of maps, and updates the old one.
 	public void CreateHeatMaps() {
 		
-		float centralized = (float)GetNode<HSlider>("../MapKeys/Centralization/cSlider").Value;
-		edgeSize = (int)GetNode<HSlider>("../MapKeys/MapSize/mSlider").Value;
-		
+		float centralized = (float)GetNode<HSlider>("../MapKeys/Centralization/Slider").Value;
+		edgeSize = (int)GetNode<HSlider>("../MapKeys/MapSize/Slider").Value;
+		heatFactor = (int)GetNode<HSlider>("../MapKeys/Climate/Slider").Value;
+		moistureFactor = heatFactor;
+		ratio = edgeSize / (int)GetNode<HSlider>("../MapKeys/Perlin/Slider").Value;
+		map = null;
 		map = new TileSetter.Tiles[edgeSize, edgeSize];
 		perlinScale = (int)(edgeSize / ratio);
 		if (perlinScale < 2) {
 			perlinScale = 2;
 		}
+		
 		Perlin mapMaker = new Perlin(edgeSize, perlinScale);
+		// gathering any seed from the seed element.
+		string k = GetNode<LineEdit>("../MapKeys/Seed/LineEdit").Text;
+		int seed;
+		if (k != null && int.TryParse(k, out seed)) {
+			mapMaker = new Perlin(edgeSize, perlinScale, seed);
+		}
+		
 		// heightMap is for generating sea level and terrain level.
 		float[,] heightMap;
 		heightMap = mapMaker.PerlinGenerator(centralized);
@@ -65,6 +76,7 @@ public partial class MapGrid : Sprite2D
 		// Loop through the grid data and paste cells
 		// loads the TileMap
 		TileMap foundation = (TileMap)GetChild(0);
+		foundation.Clear();
 		for (int y = 0; y < edgeSize; y++) {
 			for (int x = 0; x < edgeSize; x++) {
 				// creates the 

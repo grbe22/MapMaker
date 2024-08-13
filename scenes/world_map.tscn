@@ -1,10 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://bg2aanhyg2toh"]
+[gd_scene load_steps=9 format=3 uid="uid://bg2aanhyg2toh"]
 
 [ext_resource type="Script" path="res://Scripts/WorldMap.cs" id="1_8cnco"]
 [ext_resource type="Script" path="res://Scripts/MapGrid.cs" id="2_cuauq"]
 [ext_resource type="Texture2D" uid="uid://csnitx5arxf8x" path="res://Assets/Tiles/tileSets.png" id="2_ippgr"]
 [ext_resource type="Script" path="res://Scripts/MainCam.cs" id="2_kwghp"]
-[ext_resource type="Script" path="res://scenes/MapKeys.cs" id="5_6lv40"]
+[ext_resource type="Script" path="res://MapKeys.cs" id="5_6lv40"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_avkfk"]
 texture = ExtResource("2_ippgr")
@@ -23,6 +23,36 @@ texture_region_size = Vector2i(32, 32)
 
 [sub_resource type="TileSet" id="TileSet_8842v"]
 sources/0 = SubResource("TileSetAtlasSource_avkfk")
+
+[sub_resource type="CSharpScript" id="CSharpScript_rmg8d"]
+script/source = "using Godot;
+using System;
+
+public partial class LineEdit : Godot.LineEdit
+{
+	// Called when the node enters the scene tree for the first time.
+	public override void _Ready()
+	{
+	}
+
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Process(double delta)
+	{
+	}
+}
+
+
+private void _on_text_changed(string new_text)
+{
+	if (!int.TryParse(new_text, out _)) {
+		LineEdit thisIs = GetNode<LineEdit>(\"Seed/LineEdit\");
+		thisIs.FontColor = \"#ff0000\";
+	} else {
+		LineEdit thisIs = GetNode<LineEdit>(\"Seed/LineEdit\");
+		thisIs.FontColor = \"#ffffff\";
+	}
+}
+"
 
 [node name="WorldMap" type="Node2D"]
 script = ExtResource("1_8cnco")
@@ -49,18 +79,39 @@ horizontal_alignment = 2
 [node name="MapKeys" type="Node2D" parent="."]
 script = ExtResource("5_6lv40")
 
+[node name="Seed" type="Node2D" parent="MapKeys"]
+position = Vector2(0, -70)
+
+[node name="Text" type="Label" parent="MapKeys/Seed"]
+offset_left = -920.0
+offset_top = -410.0
+offset_right = -740.0
+offset_bottom = -370.0
+theme_override_font_sizes/font_size = 25
+text = "Seed"
+
+[node name="LineEdit" type="LineEdit" parent="MapKeys/Seed"]
+offset_left = -900.0
+offset_top = -370.0
+offset_right = -703.0
+offset_bottom = -339.0
+alignment = 1
+max_length = 8
+script = SubResource("CSharpScript_rmg8d")
+
 [node name="Centralization" type="Node2D" parent="MapKeys"]
 
-[node name="cSlider" type="HSlider" parent="MapKeys/Centralization"]
+[node name="Slider" type="HSlider" parent="MapKeys/Centralization"]
 offset_left = -900.0
 offset_top = -370.0
 offset_right = -702.0
 offset_bottom = -354.0
-max_value = 2.0
+min_value = -1.0
+max_value = 3.0
 step = 0.05
 value = 0.6
 
-[node name="cText" type="Label" parent="MapKeys/Centralization"]
+[node name="Text" type="Label" parent="MapKeys/Centralization"]
 offset_left = -920.0
 offset_top = -410.0
 offset_right = -740.0
@@ -69,7 +120,7 @@ theme_override_font_sizes/font_size = 25
 text = "Centralization
 "
 
-[node name="cValue" type="Label" parent="MapKeys/Centralization"]
+[node name="Value" type="Label" parent="MapKeys/Centralization"]
 offset_left = -730.0
 offset_top = -410.0
 offset_right = -670.0
@@ -80,17 +131,17 @@ text = "0.60"
 [node name="MapSize" type="Node2D" parent="MapKeys"]
 position = Vector2(0, 70)
 
-[node name="mSlider" type="HSlider" parent="MapKeys/MapSize"]
+[node name="Slider" type="HSlider" parent="MapKeys/MapSize"]
 offset_left = -900.0
 offset_top = -370.0
 offset_right = -702.0
 offset_bottom = -354.0
 min_value = 32.0
-max_value = 256.0
+max_value = 1024.0
 step = 32.0
-value = 64.0
+value = 128.0
 
-[node name="mText" type="Label" parent="MapKeys/MapSize"]
+[node name="Text" type="Label" parent="MapKeys/MapSize"]
 offset_left = -920.0
 offset_top = -410.0
 offset_right = -740.0
@@ -99,10 +150,69 @@ theme_override_font_sizes/font_size = 25
 text = "Map Size
 "
 
-[node name="mValue" type="Label" parent="MapKeys/MapSize"]
+[node name="Value" type="Label" parent="MapKeys/MapSize"]
 offset_left = -730.0
 offset_top = -410.0
 offset_right = -670.0
 offset_bottom = -370.0
 theme_override_font_sizes/font_size = 25
-text = "64"
+text = "128"
+
+[node name="Climate" type="Node2D" parent="MapKeys"]
+position = Vector2(0, 140)
+
+[node name="Slider" type="HSlider" parent="MapKeys/Climate"]
+offset_left = -900.0
+offset_top = -370.0
+offset_right = -702.0
+offset_bottom = -354.0
+min_value = 2.0
+max_value = 32.0
+value = 3.0
+
+[node name="Text" type="Label" parent="MapKeys/Climate"]
+offset_left = -920.0
+offset_top = -410.0
+offset_right = -740.0
+offset_bottom = -370.0
+theme_override_font_sizes/font_size = 25
+text = "Climate Scale
+"
+
+[node name="Value" type="Label" parent="MapKeys/Climate"]
+offset_left = -730.0
+offset_top = -410.0
+offset_right = -670.0
+offset_bottom = -370.0
+theme_override_font_sizes/font_size = 25
+text = "3"
+
+[node name="Perlin" type="Node2D" parent="MapKeys"]
+position = Vector2(0, 210)
+
+[node name="Slider" type="HSlider" parent="MapKeys/Perlin"]
+offset_left = -900.0
+offset_top = -370.0
+offset_right = -702.0
+offset_bottom = -354.0
+min_value = 2.0
+max_value = 32.0
+value = 9.0
+
+[node name="Text" type="Label" parent="MapKeys/Perlin"]
+offset_left = -920.0
+offset_top = -410.0
+offset_right = -740.0
+offset_bottom = -370.0
+theme_override_font_sizes/font_size = 25
+text = "Perlin Divider"
+
+[node name="Value" type="Label" parent="MapKeys/Perlin"]
+offset_left = -730.0
+offset_top = -410.0
+offset_right = -670.0
+offset_bottom = -370.0
+theme_override_font_sizes/font_size = 25
+text = "9"
+
+[connection signal="text_changed" from="MapKeys/Seed/LineEdit" to="MapKeys/Seed/LineEdit" method="_on_text_changed"]

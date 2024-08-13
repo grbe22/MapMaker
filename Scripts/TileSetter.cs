@@ -25,7 +25,7 @@ public partial class TileSetter : Node
 	// takes three float inputs and outputs a single enum value
 	public static Tiles tileFromArrays(float heightValue, float heatValue, float moistureValue) {
 		if (heightValue < .5) {
-			if (heatValue > .75 && heightValue < .26) { return GenFertile(moistureValue); }
+			if (heatValue > .80 && heightValue < .34) { return GenFertile(moistureValue); }
 			if (heatValue > .75 && heightValue < .3) { return Tiles.Beach; }
 			// generates ocean, or icebergs in very cold climates.
 			if (heatValue < .14) { return Tiles.Ice; }

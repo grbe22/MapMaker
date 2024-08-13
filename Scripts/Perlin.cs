@@ -39,7 +39,7 @@ public partial class Perlin {
 	}
 
 	public float[,] PerlinGenerator (float centralized) {
-		// I don't understand why I used +1 in python, but it doesn't run without it.
+
 		// the third is so that it holds Vector2s.
 		gradient = new float[gradientSize + 1, gradientSize + 1, 2];
 		// builds the gradient randomly with help of the seed and size of the perlin.
@@ -111,7 +111,7 @@ public partial class Perlin {
 	
 	// simple helper function that helps ease the transition between sections.
 	public float Smooth(float val){
-		return (val * val * (3 - (2 * val)));
+		return (val * val * (3.0f - (2.0f * val)));
 	}
 
 	// special function that calculates the dot product between an edge, and the distance.
