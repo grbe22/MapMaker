@@ -42,9 +42,9 @@ public partial class MapGrid : Sprite2D
 		map = null;
 		map = new TileSetter.Tiles[edgeSize, edgeSize];
 		perlinScale = (int)(edgeSize / ratio);
-		if (perlinScale < 2) {
-			perlinScale = 2;
-		}
+		//if (perlinScale < 2) {
+		//	perlinScale = 2;
+		//}
 		
 		Perlin mapMaker = new Perlin(edgeSize, perlinScale);
 		// gathering any seed from the seed element.
@@ -59,12 +59,12 @@ public partial class MapGrid : Sprite2D
 		heightMap = mapMaker.PerlinGenerator(centralized);
 		// heatMap is for generating the temperature of the terrain - low temperature forms ice, high forms badlands.
 		float[,] heatMap;
-		mapMaker.UpdatePerlinMap(perlinScale * heatFactor);
+		mapMaker.UpdatePerlinMap(heatFactor);
 		heatMap = mapMaker.PerlinGenerator(0.0f);
 		// moistureMap isn't really for moisture, but I dont know what a better name would be.
 		// High values generate forest & overgrown areas, low generate swamps and "murky" areas.
 		float[,] moistureMap;
-		mapMaker.UpdatePerlinMap(perlinScale * moistureFactor);
+		mapMaker.UpdatePerlinMap(moistureFactor);
 		moistureMap = mapMaker.PerlinGenerator(0.0f);
 		
 		// generates the map using these three maps.
